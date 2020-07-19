@@ -129,25 +129,44 @@ article {
 
     .upload {
       display: inline-block;
+      height: 60px;
+      width: 200px;
       margin: 10px auto;
       align-items: center;
+      overflow: hidden;
       //line-height: 100%;
       cursor: pointer;
-      input {
-        height: 60px;
-        width: 200px;
-        border: 0;
-        border-radius: 15px;
-        background-color: #ec407a;
+      position: relative;
+      left: 0;
+      border-radius: 15px;
+      background-color: #ec407a;
+
+      p {
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        line-height: 60px;
         color: $nav_color_default;
+      }
+
+      input {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 999px;
+        width: 999px;
+        border: 0;
         outline: none;
         overflow: hidden;
-        opacity: 0.5;
+        opacity: 0;
+        cursor: pointer;
       }
+
       input:active {
         transform: translate(1px, 1px);
       }
-      input:hover{
+
+      input:hover {
         text-decoration: none;
       }
     }

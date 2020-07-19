@@ -87,19 +87,33 @@ article {
       margin: 5% 5%; }
     article .content .upload {
       display: inline-block;
+      height: 60px;
+      width: 200px;
       margin: 10px auto;
       align-items: center;
-      cursor: pointer; }
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      left: 0;
+      border-radius: 15px;
+      background-color: #ec407a; }
+      article .content .upload p {
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        line-height: 60px;
+        color: #fafafa; }
       article .content .upload input {
-        height: 60px;
-        width: 200px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 999px;
+        width: 999px;
         border: 0;
-        border-radius: 15px;
-        background-color: #ec407a;
-        color: #fafafa;
         outline: none;
         overflow: hidden;
-        opacity: 0.5; }
+        opacity: 0;
+        cursor: pointer; }
       article .content .upload input:active {
         transform: translate(1px, 1px); }
       article .content .upload input:hover {
