@@ -83,6 +83,7 @@
       ]
       this.defaultActive = this.router[0].value
       this.user = { id: 20172005066, name: 'Links'}
+      this.defaultActive = this.$route.path
     }
   }
 </script>
@@ -90,6 +91,11 @@
 <style scoped lang="scss">
   $background-color-default: #545c64;
   $font-color: #fafafa;
+  html, body, div {
+    width: 100%;
+    height: 100%;
+  }
+
   .avatar {
     display: inline-block;
     height: 100px;

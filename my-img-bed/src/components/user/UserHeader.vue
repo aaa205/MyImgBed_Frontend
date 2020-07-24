@@ -64,6 +64,11 @@
 
 <style scoped lang="scss">
   $background-color-default: #545c64;
+  html, body, div {
+    height: 100%;
+    width: 100%;
+  }
+
   .root-container {
     background-color: $background-color-default;
     background-image: url('../../assets/division.png');

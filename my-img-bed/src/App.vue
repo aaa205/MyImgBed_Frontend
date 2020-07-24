@@ -11,7 +11,7 @@
         <el-aside v-if="!$route.meta.isIndex" class="no-margin no-padding">
           <nav-menu ></nav-menu>
         </el-aside>
-        <el-main class="no-margin no-padding" style="height: 100%">
+        <el-main class="no-margin no-padding full-height" style="height: 100%">
           <router-view/>
         </el-main>
       </el-container>
@@ -112,6 +112,23 @@
   html, body, div {
     width: 100%;
     height: 100%;
+  }
+
+  .el-message-box__wrapper, .el-message-box {
+    width: auto;
+    height: auto;
+    div {
+      width: auto;
+      height: auto;
+    }
+  }
+  .el-message, .el-message--success{
+    width: auto;
+    height: auto;
+    div {
+      width: auto;
+      height: auto;
+    }
   }
 
   #app {

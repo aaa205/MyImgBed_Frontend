@@ -1,27 +1,64 @@
 <template>
-  <nav>
-    <div class="nav-wrapper">
-      <div class="logo">
-        <a href="index.html">
-          <img src="../../assets/logo.png" alt="Logo">
-        </a>
+  <div class="root-container">
+    <div class="logo">
+      <a href="#">
+        <el-image
+          :src="logoUrl"
+          fit="contain"
+        ></el-image>
+      </a>
+    </div>
+    <div class="nav">
+        <el-upload
+          class="upload-demo auto-height-width"
+          action="#"
+          multiple
+        >
+          <el-link
+            type="primary"
+          >上传</el-link>
+        </el-upload>
+      <div class="auto-height-width">
+        <el-link type="primary">注册</el-link>
       </div>
-      <div class="space"></div>
-      <div class="nav">
-        <ul>
-          <li><a href="#">上传</a></li>
-          <li><a href="#">注册</a></li>
-          <li><a href="#">登录</a></li>
-          <li><a href="#">关于我们</a></li>
-        </ul>
+      <div class="auto-height-width">
+        <el-link type="primary">登录</el-link>
+      </div>
+      <div class="auto-height-width">
+        <el-link type="primary">关于我们</el-link>
       </div>
     </div>
-  </nav>
+  </div>
+
+
+  <!--  <nav>-->
+  <!--    <div class="nav-wrapper">-->
+  <!--      <div class="logo">-->
+  <!--        <a href="index.html">-->
+  <!--          <img src="../../assets/logo.png" alt="Logo">-->
+  <!--        </a>-->
+  <!--      </div>-->
+  <!--      <div class="space"></div>-->
+  <!--      <div class="nav">-->
+  <!--        <ul>-->
+  <!--          <li><a href="#">上传</a></li>-->
+  <!--          <li><a href="#">注册</a></li>-->
+  <!--          <li><a href="#">登录</a></li>-->
+  <!--          <li><a href="#">关于我们</a></li>-->
+  <!--        </ul>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </nav>-->
 </template>
 
 <script>
   export default {
-    name: 'NavBar'
+    name: 'NavBar',
+    data(){
+      return {
+        logoUrl: require('../../assets/logo.png')
+      }
+    }
   }
 </script>
 
@@ -34,53 +71,25 @@
   $dm_bgc: #29b6f6;
 
   $text_color: #424242;
-  body, html, .root-container {
-    width: 100%;
-    height: 100%;
+
+  .auto-height-width {
+    height: auto;
+    width: auto;
   }
 
-  .nav-wrapper {
-    height: 100%;
-    width: 80%;
-    margin: 0 auto;
+  .root-container {
     display: flex;
-    flex-direction: row;
-
-  }
-
-  nav {
-    height: 100%;
-    width: 100%;
-    background: linear-gradient(rgba(2, 119, 189, .7), rgba(179, 229, 252, .7));
-  }
-
-  .logo img {
-    height: 100%;
-    width: 40%;
-  }
-
-  .nav {
-    ul {
-      list-style: none;
-      float: right;
-
-      li {
-        float: left;
-        margin: 0 10px;
-
-        a {
-          text-decoration: none;
-          color: $nav_color_default;
-        }
-
-        a:hover {
-          color: $nav_color_hover
-        }
+    justify-content: space-between;
+    width: auto;
+    .nav {
+      display: flex;
+      justify-content: end;
+      align-items: center;
+      width: auto;
+      div {
+        margin-right: 25px;
       }
     }
   }
 
-  .space {
-    margin: 0 auto;
-  }
 </style>

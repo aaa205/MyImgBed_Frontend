@@ -7,6 +7,7 @@ import Detail from '../components/user/Detail'
 import Gallery from '../components/user/Gallery'
 import Setting from '../components/user/Setting'
 import ElementUI from 'element-ui'
+// import Clipboard from 'clipboard'
 import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.use(ElementUI)
