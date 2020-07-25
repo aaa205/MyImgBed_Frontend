@@ -16,39 +16,21 @@
         >
           <el-link
             type="primary"
+            :underline="false"
           >上传</el-link>
         </el-upload>
       <div class="auto-height-width">
-        <el-link type="primary">注册</el-link>
+        <el-link type="primary" :underline="false" @click="openRegist">注册</el-link>
       </div>
       <div class="auto-height-width">
-        <el-link type="primary">登录</el-link>
+        <el-link type="primary" :underline="false" @click="openLogin">登录</el-link>
       </div>
       <div class="auto-height-width">
-        <el-link type="primary">关于我们</el-link>
+        <el-link type="primary" :underline="false">关于我们</el-link>
       </div>
     </div>
   </div>
 
-
-  <!--  <nav>-->
-  <!--    <div class="nav-wrapper">-->
-  <!--      <div class="logo">-->
-  <!--        <a href="index.html">-->
-  <!--          <img src="../../assets/logo.png" alt="Logo">-->
-  <!--        </a>-->
-  <!--      </div>-->
-  <!--      <div class="space"></div>-->
-  <!--      <div class="nav">-->
-  <!--        <ul>-->
-  <!--          <li><a href="#">上传</a></li>-->
-  <!--          <li><a href="#">注册</a></li>-->
-  <!--          <li><a href="#">登录</a></li>-->
-  <!--          <li><a href="#">关于我们</a></li>-->
-  <!--        </ul>-->
-  <!--      </div>-->
-  <!--    </div>-->
-  <!--  </nav>-->
 </template>
 
 <script>
@@ -57,6 +39,16 @@
     data(){
       return {
         logoUrl: require('../../assets/logo.png')
+      }
+    },
+    methods: {
+      openRegist: function () {
+        let regist = document.getElementsByClassName('register-container')[0]
+        regist.style.visibility = 'visible'
+      },
+      openLogin: function () {
+        let login = document.getElementsByClassName('login-container')[0]
+        login.style.visibility = 'visible'
       }
     }
   }
@@ -81,11 +73,20 @@
     display: flex;
     justify-content: space-between;
     width: auto;
+    background-color: rgba(255,255,255,.9);
+    .logo {
+      width: auto;
+    }
+
     .nav {
       display: flex;
       justify-content: end;
       align-items: center;
       width: auto;
+      .el-link {
+        font-weight: bold;
+        font-size: 110%;
+      }
       div {
         margin-right: 25px;
       }
