@@ -1,5 +1,6 @@
 <template>
   <div class="root-container">
+<!--    注册-->
     <div class="register-container">
       <div class="register-area">
         <div class="register-title">
@@ -22,8 +23,7 @@
         </el-form>
       </div>
     </div>
-
-
+<!--    登录-->
     <div class="login-container">
       <div class="login-area">
         <div class="login-title">
@@ -43,14 +43,13 @@
         </el-form>
       </div>
     </div>
-
-
-
+<!--    背景-->
     <el-image
       :src="bgSrc"
       fit="cover"
       class="princess"
     ></el-image>
+<!--    主要内容-->
     <div class="content">
       <h1>A 2 0 5 图 床</h1>
       <p>
@@ -143,7 +142,7 @@
     },
     methods: {
       handleSummit : function () {
-
+        this.handleRegistCancel()
       },
       handleRegistCancel: function () {
         let regist =
@@ -157,6 +156,8 @@
       },
       handleLogin: function () {
 
+        this.$store.state.isNoLogined = false
+        this.handleLoginCancel()
       }
     }
   }

@@ -26,7 +26,7 @@
 <!--        <el-link type="info" :underline='false'>修改密码</el-link>-->
 <!--      </div>-->
       <div class="logout">
-        <el-link type="info" :underline='false'>退出登陆</el-link>
+        <el-link type="info" :underline='false' href="/index">退出登陆</el-link>
       </div>
     </div>
   </div>

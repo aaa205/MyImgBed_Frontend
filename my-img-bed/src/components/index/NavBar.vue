@@ -20,10 +20,25 @@
           >上传</el-link>
         </el-upload>
       <div class="auto-height-width">
-        <el-link type="primary" :underline="false" @click="openRegist">注册</el-link>
+        <el-link
+          type="primary"
+          :underline="false"
+          @click="openRegist"
+          v-if="$store.state.isNoLogined"
+        >注册</el-link>
       </div>
       <div class="auto-height-width">
-        <el-link type="primary" :underline="false" @click="openLogin" v-if="isNoLogined">登录</el-link>
+        <el-link
+          type="primary"
+          :underline="false"
+          @click="openLogin"
+          v-if="$store.state.isNoLogined">登录</el-link>
+        <el-link
+          type="primary"
+          :underline="false"
+          href="/#/user"
+          v-else
+        >个人中心</el-link>
       </div>
       <div class="auto-height-width">
         <el-link type="primary" :underline="false" href="/#/user">关于我们</el-link>
@@ -38,8 +53,7 @@
     name: 'NavBar',
     data(){
       return {
-        logoUrl: require('../../assets/logo.png'),
-        isNoLogined: true
+        logoUrl: require('../../assets/logo.png')
       }
     },
     methods: {
