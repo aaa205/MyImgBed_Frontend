@@ -63,7 +63,6 @@
         :accept="'image/*'"
         :before-upload="beforeUpload"
         action="#"
-        :headers="headers"
         :show-file-list="false"
         multiple
         :limit="3"
@@ -75,6 +74,8 @@
 </template>
 
 <script>
+  import qs from 'qs'
+
   export default {
     name: 'Main',
     data () {
@@ -154,8 +155,55 @@
 
     },
     methods: {
+      // 注册请求
       handleSummit: function () {
-        this.handleRegistCancel()
+        this.$axios.request({
+          method: 'post',
+          url: '/user/register',
+          data: {
+            name: this.registForm.usernameR,
+            password: this.registForm.passwordR
+          }
+        }).then(res => {
+          // 注册完直接登录
+          this.loginForm.usernameL = this.registForm.usernameR
+          this.loginForm.passwordL = this.registForm.passwordR
+          this.$store.commit('Regist',{
+            uid: res.data.data.id
+          })
+          console.log(res.data.data.id)
+          this.$message({
+            type: 'success',
+            message: '注册成功'
+          })
+          this.handleRegistCancel()
+        }).then(res=>{  // 注册成功开始登录
+            this.$axios.request({
+              method: 'post',
+              url: '/user/login',
+              data: {
+                name: this.loginForm.usernameL,
+                password: this.loginForm.passwordL
+              }
+            }).then(res=>{
+              // 登录成功，转换登录状态
+              this.$store.commit('Login',{
+                token: res.data.data.token,
+                uid: res.data.data.userID
+              })
+              console.log(this.$store.state.Token)
+              this.$message({
+                type: 'success',
+                message: '登录成功！'
+              })
+              this.createAlbum()
+            })
+          }).catch(err => {
+          this.$message({
+            type: 'error',
+            message: '注册失败'
+          })
+        })
       },
       handleRegistCancel: function () {
         let regist =
@@ -167,15 +215,40 @@
           document.getElementsByClassName('login-container')[0]
         login.style.visibility = 'hidden'
       },
-      handleLogin: function () {
 
-        this.$store.state.isNoLogined = false
-        this.handleLoginCancel()
+      // 登录
+      handleLogin: function () {
+        this.$axios.request({
+          method: 'post',
+          url: '/user/login',
+          data: {
+            name: this.loginForm.usernameL,
+            password: this.loginForm.passwordL
+          }
+        }).then(res=>{
+          // 转换登录状态
+          this.$store.commit('Login',{
+            token: res.data.data.token,
+            uid: res.data.data.userID
+          })
+          console.log('点击登录里面的'+ this.$store.state.Token)
+          this.$message({
+            type: 'success',
+            message: '登录成功！'
+          })
+          this.handleLoginCancel()
+        }).catch(err=>{
+          this.$message({
+            type: 'success',
+            message: '登录失败！'
+          })
+        })
+
       },
       beforeUpload: function (imgFile) {
         let fd = new FormData()
         fd.append('file', imgFile)
-        this.$axios.post('/upload', fd).then(res => {
+        this.$axios.post('/pic/upload', fd).then(res => {
           this.$message({
             type: 'success',
             message: '上传成功'
@@ -185,6 +258,25 @@
             type: 'error',
             message: '上传成功'
           })
+        })
+      },
+      // 创建相册
+      createAlbum: function () {
+        console.log('创建相册里的'+this.$store.state.Token)
+        console.log('创建相册里的id'+this.$store.state.userID)
+        this.$axios.request({
+          method: 'post',
+          url: `/pic/u/${this.$store.state.userID}/albums`,
+          data:{
+            newAlbumName: 'myAlbum'
+          },
+          headers:{
+            'Authorization': this.$store.state.Token
+          }
+        }).then(res=>{
+
+        }).catch(err=>{
+          alert(err)
         })
       }
     }

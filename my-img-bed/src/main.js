@@ -6,11 +6,13 @@ import router from './router'
 import Vuex from 'vuex'
 import store from './store/store'
 import axios from 'axios'
+import qs from 'qs'
 Vue.config.productionTip = false
 
 Vue.prototype.$axios = axios
 axios.defaults.baseURL = '/api'
 Vue.prototype.$store = store
+Vue.prototype.$qs = qs
 
 /* eslint-disable no-new */
 new Vue({
