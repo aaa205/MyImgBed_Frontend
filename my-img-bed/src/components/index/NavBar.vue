@@ -56,7 +56,10 @@
     data(){
       return {
         logoUrl: require('../../assets/logo.png'),
-        imageUrl: ''
+        imageUrl: '',
+        userID: this.$store.state.userID,
+        Token: this.$store.state.Token,
+        albumID: this.$store.state.albumID
       }
     },
     methods: {
@@ -70,17 +73,16 @@
       },
       upload: function (imgFile) {
         let fd = new FormData()
-        fd.append('file', imgFile)
-        this.$axios.post('/upload',fd).then(res=>{
-          this.$message({
-            type:'success',
-            message: '上传成功！'
-          })
-        }).catch(err=>{
-          this.$message({
-            type: 'error',
-            message: '上传失败！\n'+err
-          })
+        fd.append('file',imgFile)
+        fd.append('userID',this.userID)
+        fd.append('albumID',this.albumID)
+        this.$axios.request({
+          method: 'post',
+          data: fd,
+          url: '/pic/upload',
+          headers: {
+            Authorization: this.Token
+          }
         })
       }
     }

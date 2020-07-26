@@ -52,8 +52,6 @@
 </template>
 
 <script>
-  import axios from 'axios'
-
   export default {
     name: 'Album',
     props: {
@@ -66,7 +64,9 @@
         previewSrcList: [],
         currentPage: 1,
         imagesShow: [],
-        total: 0
+        total: 0,
+        userID: -1,
+        Token: ''
       }
     },
     methods: {
@@ -133,7 +133,20 @@
       }
     },
     created () {
-      this.$axios.get('/u/1/albums/1').then((res)=> {
+      let str = sessionStorage.getItem('store')
+      let startIndex = str.indexOf('userID')+9
+      let endIndex = str.indexOf('"',startIndex)
+      this.userID = str.substr(startIndex,endIndex-startIndex)
+      startIndex = str.indexOf('Token')+8
+      endIndex = str.indexOf('"',startIndex)
+      this.Token = str.substr(startIndex, endIndex-startIndex)
+      this.$axios.request({
+        method: 'get',
+        url: `/pic/u/${this.userID}/pictures`,
+        headers: {
+          Authorization: this.Token
+        }
+      }).then((res)=> {
         this.images = res.data.data
         console.log(this.images)
         this.imagesShow = this.images.filter((item, index) => {

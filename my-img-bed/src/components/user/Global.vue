@@ -64,6 +64,8 @@
         }
       }
       return {
+        Token: '',
+        userID: -1,
         form: {
           originPsw: '',
           newPsw:'',
@@ -91,6 +93,25 @@
       onSummit: function () {
 
       }
+    },
+    created () {
+      let str = sessionStorage.getItem('store')
+      let startIndex = str.indexOf('userID')+9
+      let endIndex = str.indexOf('"',startIndex)
+      this.userID = str.substr(startIndex,endIndex-startIndex)
+      startIndex = str.indexOf('Token')+8
+      endIndex = str.indexOf('"',startIndex)
+      this.Token = str.substr(startIndex, endIndex-startIndex)
+      this.$axios.request({
+        method: 'get',
+        url: `/pic/u/${this.userID}/pictures`,
+        headers: {
+          Authorization: this.Token
+        }
+      }).then(res=>{
+        this.user.albumCount = 1
+        this.user.imgCount  = res.data.data.length
+      })
     }
   }
 </script>

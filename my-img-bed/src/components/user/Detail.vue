@@ -105,7 +105,10 @@
         currentPage: 1,
         total: 0,
         currentRow: -1,
-        currentCol: -1
+        currentCol: -1,
+        userID: -1,
+        Token: '',
+        albumID: -1
       }
     },
     methods: {
@@ -141,24 +144,29 @@
       },
       handleDelete: function (index) {
         let curIndex = index
-        this.$confirm('此操作将永久删除该图片, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.tableData.splice(curIndex, 1)
-          this.originTableData.splice(curIndex, 1)
-          this.total--
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
+        console.log(curIndex)
+          this.$axios.request({
+            method: 'delete',
+            url: `/pic/p/${this.tableData[curIndex].id}`,
+            params: {
+              userID: this.userID,
+              albumID: this.albumID
+            },
+            headers: {
+              Authorization: this.Token
+            }
+          }).then(res => {
+            this.tableData.splice(curIndex, 1)
+            this.originTableData.splice(curIndex, 1)
+            this.total--
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            window.location.reload()
+          }).catch(err=>{
+            alert(err)
           })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
       },
       onCopy: function () {
         this.$message({
@@ -168,8 +176,24 @@
       }
     },
     created () {
+      let str = sessionStorage.getItem('store')
+      let startIndex = str.indexOf('userID')+9
+      let endIndex = str.indexOf('"',startIndex)
+      this.userID = str.substr(startIndex,endIndex-startIndex)
+      startIndex = str.indexOf('Token')+8
+      endIndex = str.indexOf('"',startIndex)
+      this.Token = str.substr(startIndex, endIndex-startIndex)
+      startIndex = str.indexOf('albumID')+9
+      endIndex = str.indexOf('}',startIndex)
+      this.albumID = str.substr(startIndex,endIndex-startIndex)
       this.pageSize = 5
-      this.$axios.get('/u/1/albums/1').then((res)=> {
+      this.$axios.request({
+        method: 'get',
+        url: `/pic/u/${this.userID}/pictures`,
+        headers :{
+          Authorization: this.Token
+        }
+      }).then((res)=> {
         this.originTableData = res.data.data
         this.tableData = this.originTableData.filter((item, index) => {
           return index < this.currentPage * this.pageSize

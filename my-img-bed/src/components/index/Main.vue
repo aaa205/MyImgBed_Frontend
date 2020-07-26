@@ -148,9 +148,9 @@
           ]
         },
         fileList: [],
-        headers: {
-          Authorization: 'z8xc789w'
-        }
+        userID: this.$store.state.userID,
+        Token: this.$store.state.Token,
+        albumID: this.$store.state.albumID
       }
 
     },
@@ -171,7 +171,6 @@
           this.$store.commit('Regist',{
             uid: res.data.data.id
           })
-          console.log(res.data.data.id)
           this.$message({
             type: 'success',
             message: '注册成功'
@@ -191,7 +190,7 @@
                 token: res.data.data.token,
                 uid: res.data.data.userID
               })
-              console.log(this.$store.state.Token)
+              this.$store.commit('setUsername',res.data.data.userName)
               this.$message({
                 type: 'success',
                 message: '登录成功！'
@@ -231,15 +230,25 @@
             token: res.data.data.token,
             uid: res.data.data.userID
           })
-          console.log('点击登录里面的'+ this.$store.state.Token)
+          this.$store.commit('setUsername',res.data.data.userName)
           this.$message({
             type: 'success',
             message: '登录成功！'
           })
-          this.handleLoginCancel()
+          this.$axios.request({
+            method: 'get',
+            url: `/pic/u/${this.$store.state.userID}/albums`,
+            headers: {
+              Authorization: this.$store.state.Token
+            }
+          }).then(res=> {
+            this.$store.commit('setAlbumID', res.data.data[0].id)
+            this.handleLoginCancel()
+            window.location.reload()
+          })
         }).catch(err=>{
           this.$message({
-            type: 'success',
+            type: 'error',
             message: '登录失败！'
           })
         })
@@ -247,23 +256,20 @@
       },
       beforeUpload: function (imgFile) {
         let fd = new FormData()
-        fd.append('file', imgFile)
-        this.$axios.post('/pic/upload', fd).then(res => {
-          this.$message({
-            type: 'success',
-            message: '上传成功'
-          })
-        }).catch(err => {
-          this.$message({
-            type: 'error',
-            message: '上传成功'
-          })
+        fd.append('file',imgFile)
+        fd.append('userID',this.userID)
+        fd.append('albumID',this.albumID)
+        this.$axios.request({
+          method: 'post',
+          data: fd,
+          url: '/pic/upload',
+          headers: {
+            Authorization: this.Token
+          }
         })
       },
       // 创建相册
       createAlbum: function () {
-        console.log('创建相册里的'+this.$store.state.Token)
-        console.log('创建相册里的id'+this.$store.state.userID)
         this.$axios.request({
           method: 'post',
           url: `/pic/u/${this.$store.state.userID}/albums`,
@@ -274,7 +280,8 @@
             'Authorization': this.$store.state.Token
           }
         }).then(res=>{
-
+          this.$store.commit('setAlbumID',res.data.data.id)
+          window.location.reload()
         }).catch(err=>{
           alert(err)
         })

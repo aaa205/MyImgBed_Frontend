@@ -14,7 +14,9 @@ export default new Vuex.Store({
     isIndex: true,
     isNoLogined: true,
     Token: null,
-    userID: null
+    userID: null,
+    username: null,
+    albumID: null
   },
   // 全局方法，一般用于axios
   mutations: {
@@ -25,6 +27,12 @@ export default new Vuex.Store({
     },
     Regist(state, value){
       state.userID = value.uid
+    },
+    setUsername(state, value){
+      state.username = value
+    },
+    setAlbumID(state, value){
+      state.albumID = value
     }
   }
 })

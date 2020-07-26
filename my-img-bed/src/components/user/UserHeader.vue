@@ -21,7 +21,7 @@
         </el-upload>
       </div>
       <div class="logout">
-        <el-link type="info" :underline='false' href="/index">退出登陆</el-link>
+        <el-link type="info" :underline='false' href="/index" @click="handleLogout">返回首页</el-link>
       </div>
     </div>
   </div>
@@ -36,22 +36,44 @@
           logo: [
             {url: require('../../assets/logo.png'), alt: 'logo'}
           ]
-        }
+        },
+        Token: '',
+        albumID: -1,
+        userID: -1
       }
     },
     methods: {
       upload: function (imgFile) {
         let fd = new FormData()
         fd.append('file',imgFile)
+        fd.append('userID',this.userID)
+        fd.append('albumID',this.albumID)
         this.$axios.request({
           method: 'post',
           data: fd,
-          params: {
-            userID:1,
-            albumID: 1
+          url: '/pic/upload',
+          headers: {
+            Authorization: this.Token
           }
+        }).then(res=>{
+          window.location.reload()
         })
+      },
+      handleLogout: function () {
+
       }
+    },
+    created () {
+      let str = sessionStorage.getItem('store')
+      let startIndex = str.indexOf('userID')+9
+      let endIndex = str.indexOf('"',startIndex)
+      this.userID = str.substr(startIndex,endIndex-startIndex)
+      startIndex = str.indexOf('Token')+8
+      endIndex = str.indexOf('"',startIndex)
+      this.Token = str.substr(startIndex, endIndex-startIndex)
+      startIndex = str.indexOf('albumID')+9
+      endIndex = str.indexOf('}',startIndex)
+      this.albumID = str.substr(startIndex,endIndex-startIndex)
     }
   }
 </script>

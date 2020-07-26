@@ -37,6 +37,7 @@
 
 <script>
   export default {
+
     name: 'NavMenu',
     methods: {
       handleOpen (key, keyPath) {
@@ -51,6 +52,10 @@
       }
     },
     data () {
+      let token = this.$store.state.Token
+      let username = this.$store.state.username
+      let userID = this.$store.state.userID
+      let albumID = null
       return {
         // 使用路由模式的导航
         useRouter: true,
@@ -84,6 +89,12 @@
       this.defaultActive = this.router[0].value
       this.user = { id: 20172005066, name: 'Links'}
       this.defaultActive = this.$route.path
+
+      let str = sessionStorage.getItem('store')
+      let startIndex = str.indexOf('username')+11
+      let endIndex = str.indexOf('"',startIndex)
+
+      this.user.name = str.substr(startIndex, endIndex-startIndex)
     }
   }
 </script>
