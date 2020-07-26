@@ -1,12 +1,13 @@
 <template>
   <div class="root-container">
-<!--    注册-->
+    <!--    注册-->
     <div class="register-container">
       <div class="register-area">
         <div class="register-title">
           欢迎注册
         </div>
-        <el-form ref="ruleForm" :model="registForm" label-width="120px" :rules="rules">
+        <el-form ref="ruleForm" :model="registForm" label-width="120px"
+                 :rules="rules">
           <el-form-item label="用户名" prop="usernameR">
             <el-input v-model="registForm.usernameR"></el-input>
           </el-form-item>
@@ -14,7 +15,8 @@
             <el-input type="password" v-model="registForm.passwordR"></el-input>
           </el-form-item>
           <el-form-item label="确认密码" prop="checkPasswordR">
-            <el-input type="password" v-model="registForm.checkPasswordR"></el-input>
+            <el-input type="password"
+                      v-model="registForm.checkPasswordR"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button @click="handleRegistCancel">取消</el-button>
@@ -23,13 +25,14 @@
         </el-form>
       </div>
     </div>
-<!--    登录-->
+    <!--    登录-->
     <div class="login-container">
       <div class="login-area">
         <div class="login-title">
           欢迎回来
         </div>
-        <el-form ref="ruleForm" :model="loginForm" label-width="120px" :rules="rules">
+        <el-form ref="ruleForm" :model="loginForm" label-width="120px"
+                 :rules="rules">
           <el-form-item label="用户名" prop="usernameL">
             <el-input v-model="loginForm.usernameL"></el-input>
           </el-form-item>
@@ -43,24 +46,30 @@
         </el-form>
       </div>
     </div>
-<!--    背景-->
+    <!--    背景-->
     <el-image
       :src="bgSrc"
       fit="cover"
       class="princess"
     ></el-image>
-<!--    主要内容-->
+    <!--    主要内容-->
     <div class="content">
       <h1>A 2 0 5 图 床</h1>
       <p>
         本图床有A205全体成员共同开发，请勿上传涩图。
       </p>
-      <div class="uploadArea">
-        <a class="upload">
-          上传图片
-        </a>
-        <input type="file">
-      </div>
+      <el-upload
+        class="upload-demo"
+        :accept="'image/*'"
+        :before-upload="beforeUpload"
+        action="#"
+        :headers="headers"
+        :show-file-list="false"
+        multiple
+        :limit="3"
+        :file-list="fileList">
+        <el-button size="small" type="primary">点击上传</el-button>
+      </el-upload>
     </div>
   </div>
 </template>
@@ -70,7 +79,7 @@
     name: 'Main',
     data () {
       let passwordLength = 6
-      let validRUsername = (rule, value, callback)=> {
+      let validRUsername = (rule, value, callback) => {
         if (value === '' || value === undefined) {
           callback(new Error('用户名不能为空!'))
         } else {
@@ -86,7 +95,7 @@
           callback()
         }
       }
-      let validRCheckPass = (rule, value, callback) =>{
+      let validRCheckPass = (rule, value, callback) => {
         if (value === '' || value === undefined) {
           callback(new Error('密码不能为空!'))
         } else if (value !== this.registForm.passwordR) {
@@ -95,14 +104,14 @@
           callback()
         }
       }
-      let validLUsername = (rule, value, callback) =>{
+      let validLUsername = (rule, value, callback) => {
         if (value === '' || value === undefined) {
           callback(new Error('用户名不能为空!'))
         } else {
           callback()
         }
       }
-      let validLPassword = (rule, value, callback) =>{
+      let validLPassword = (rule, value, callback) => {
         if (value === '' || value === undefined) {
           callback(new Error('密码不能为空'))
         } else {
@@ -136,12 +145,16 @@
           passwordL: [
             {validator: validLPassword, trigger: 'blur'}
           ]
+        },
+        fileList: [],
+        headers: {
+          Authorization: 'z8xc789w'
         }
       }
 
     },
     methods: {
-      handleSummit : function () {
+      handleSummit: function () {
         this.handleRegistCancel()
       },
       handleRegistCancel: function () {
@@ -158,6 +171,21 @@
 
         this.$store.state.isNoLogined = false
         this.handleLoginCancel()
+      },
+      beforeUpload: function (imgFile) {
+        let fd = new FormData()
+        fd.append('file', imgFile)
+        this.$axios.post('/upload', fd).then(res => {
+          this.$message({
+            type: 'success',
+            message: '上传成功'
+          })
+        }).catch(err => {
+          this.$message({
+            type: 'error',
+            message: '上传成功'
+          })
+        })
       }
     }
   }
@@ -185,9 +213,10 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background-color: rgba(0,0,0, 0.3);
+      background-color: rgba(0, 0, 0, 0.3);
       visibility: hidden;
       z-index: 9999;
+
       .register-area {
         width: 400px;
         height: 300px;
@@ -195,6 +224,7 @@
         border-radius: 10px;
         margin-top: 100px;
         padding: 30px;
+
         .register-title {
           font-size: 150%;
           color: #2196f3;
@@ -213,9 +243,10 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background-color: rgba(0,0,0, 0.3);
+      background-color: rgba(0, 0, 0, 0.3);
       visibility: hidden;
       z-index: 9999;
+
       .login-area {
         width: 400px;
         height: 300px;
@@ -223,6 +254,7 @@
         border-radius: 10px;
         margin-top: 100px;
         padding: 30px;
+
         .login-title {
           font-size: 150%;
           color: #2196f3;
@@ -275,11 +307,13 @@
         color: #fafafa;
         font-size: 120%;
         font-weight: 700;
+
         .upload {
           position: relative;
           overflow: hidden;
           line-height: 70px;
         }
+
         input[type='file'] {
           position: relative;
           top: -999px;

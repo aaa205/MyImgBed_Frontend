@@ -12,6 +12,8 @@
         <el-upload
           class="upload-demo auto-height-width"
           action="#"
+          :accept="'image/*'"
+          :before-upload="upload"
           multiple
         >
           <el-link
@@ -53,7 +55,8 @@
     name: 'NavBar',
     data(){
       return {
-        logoUrl: require('../../assets/logo.png')
+        logoUrl: require('../../assets/logo.png'),
+        imageUrl: ''
       }
     },
     methods: {
@@ -64,6 +67,21 @@
       openLogin: function () {
         let login = document.getElementsByClassName('login-container')[0]
         login.style.visibility = 'visible'
+      },
+      upload: function (imgFile) {
+        let fd = new FormData()
+        fd.append('file', imgFile)
+        this.$axios.post('/upload',fd).then(res=>{
+          this.$message({
+            type:'success',
+            message: '上传成功！'
+          })
+        }).catch(err=>{
+          this.$message({
+            type: 'error',
+            message: '上传失败！\n'+err
+          })
+        })
       }
     }
   }

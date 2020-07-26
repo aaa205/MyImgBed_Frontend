@@ -11,7 +11,8 @@
       :stripe="true"
       :border="true"
       lazy
-      @selection-change="handleSelectionChange">
+      @select="handleSelectionChange"
+    >
       <el-table-column
         type="selection"
         class="table-column">
@@ -62,12 +63,18 @@
       <el-table-column
         class="table-column"
         label="更多操作"
-        :width="100">
+        :width="100"
+      >
         <template slot-scope="scope">
           <div>
-            <el-link type="primary">复制地址</el-link>
-            <el-link type="primary">修改图片</el-link>
-            <el-link type="danger">删除图片</el-link>
+            <el-link
+              type="primary"
+              v-clipboard:copy="scope.row.url"
+              v-clipboard:success="onCopy"
+            >复制地址</el-link>
+            <el-link
+              type="danger"
+              @click="handleDelete(scope.$index)">删除图片</el-link>
           </div>
         </template>
       </el-table-column>
@@ -96,13 +103,14 @@
         previewSrcList: [],
         images: [],
         currentPage: 1,
-        imagesShow: [],
-        total: 0
+        total: 0,
+        currentRow: -1,
+        currentCol: -1
       }
     },
     methods: {
-      handleSelectionChange: function () {
-
+      handleSelectionChange: function (selection, row) {
+        this.currentRow = selection
       },
       handleCurrentChange: function (curPage) {
         this.tableData = this.originTableData.filter((item, index) => {
@@ -130,16 +138,17 @@
         for (let i = 0; i < this.tableData.length; i++) {
           this.previewSrcList[i] = this.tableData[i].url
         }
-      }, handleDelete: function (event) {
-        let curIndex = Number.parseInt(event.target.getAttribute('imageindex'))
-        this.tableData.splice(curIndex, 1)
-        this.originTableData.splice(curIndex, 1)
-        console.log(this.imagesShow.length, this.images.length)
+      },
+      handleDelete: function (index) {
+        let curIndex = index
         this.$confirm('此操作将永久删除该图片, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          this.tableData.splice(curIndex, 1)
+          this.originTableData.splice(curIndex, 1)
+          this.total--
           this.$message({
             type: 'success',
             message: '删除成功!'
@@ -150,211 +159,26 @@
             message: '已取消删除'
           })
         })
+      },
+      onCopy: function () {
+        this.$message({
+          type: 'success',
+          message: '复制地址成功！'
+        })
       }
     },
     created () {
       this.pageSize = 5
-      this.originTableData = [
-        {
-          id: 4456456,
-          name: '顶上之战',
-          uploadTime: new Date(),
-          type: '好东西',
-          like: 123,
-          url: require('../../assets/myImages/0.png')
-        },
-        {
-          id: 456872,
-          name: '纪念',
-          uploadTime: new Date(),
-          type: '好东西+1',
-          like: 99,
-          url: require('../../assets/myImages/1.png')
-        },
-        {
-          id: 95058,
-          name: '随便看',
-          uploadTime: new Date(),
-          type: '一般般',
-          like: 1,
-          url: require('../../assets/myImages/2.png')
-        },
-        {
-          id: 4456456,
-          name: '顶上之战',
-          uploadTime: new Date(),
-          type: '好东西',
-          like: 123,
-          url: require('../../assets/myImages/0.png')
-        },
-        {
-          id: 456872,
-          name: '纪念',
-          uploadTime: new Date(),
-          type: '好东西+1',
-          like: 99,
-          url: require('../../assets/myImages/1.png')
-        },
-        {
-          id: 95058,
-          name: '随便看',
-          uploadTime: new Date(),
-          type: '一般般',
-          like: 1,
-          url: require('../../assets/myImages/2.png')
-        },
-        {
-          id: 4456456,
-          name: '顶上之战',
-          uploadTime: new Date(),
-          type: '好东西',
-          like: 123,
-          url: require('../../assets/myImages/0.png')
-        },
-        {
-          id: 456872,
-          name: '纪念',
-          uploadTime: new Date(),
-          type: '好东西+1',
-          like: 99,
-          url: require('../../assets/myImages/1.png')
-        },
-        {
-          id: 95058,
-          name: '随便看',
-          uploadTime: new Date(),
-          type: '一般般',
-          like: 1,
-          url: require('../../assets/myImages/2.png')
-        },
-        {
-          id: 4456456,
-          name: '顶上之战',
-          uploadTime: new Date(),
-          type: '好东西',
-          like: 123,
-          url: require('../../assets/myImages/0.png')
-        },
-        {
-          id: 456872,
-          name: '纪念',
-          uploadTime: new Date(),
-          type: '好东西+1',
-          like: 99,
-          url: require('../../assets/myImages/1.png')
-        },
-        {
-          id: 95058,
-          name: '随便看',
-          uploadTime: new Date(),
-          type: '一般般',
-          like: 1,
-          url: require('../../assets/myImages/2.png')
-        },
-        {
-          id: 4456456,
-          name: '顶上之战',
-          uploadTime: new Date(),
-          type: '好东西',
-          like: 123,
-          url: require('../../assets/myImages/0.png')
-        },
-        {
-          id: 456872,
-          name: '纪念',
-          uploadTime: new Date(),
-          type: '好东西+1',
-          like: 99,
-          url: require('../../assets/myImages/1.png')
-        },
-        {
-          id: 95058,
-          name: '随便看',
-          uploadTime: new Date(),
-          type: '一般般',
-          like: 1,
-          url: require('../../assets/myImages/2.png')
-        },
-        {
-          id: 4456456,
-          name: '顶上之战',
-          uploadTime: new Date(),
-          type: '好东西',
-          like: 123,
-          url: require('../../assets/myImages/0.png')
-        },
-        {
-          id: 456872,
-          name: '纪念',
-          uploadTime: new Date(),
-          type: '好东西+1',
-          like: 99,
-          url: require('../../assets/myImages/1.png')
-        },
-        {
-          id: 95058,
-          name: '随便看',
-          uploadTime: new Date(),
-          type: '一般般',
-          like: 1,
-          url: require('../../assets/myImages/2.png')
-        },
-        {
-          id: 4456456,
-          name: '顶上之战',
-          uploadTime: new Date(),
-          type: '好东西',
-          like: 123,
-          url: require('../../assets/myImages/0.png')
-        },
-        {
-          id: 456872,
-          name: '纪念',
-          uploadTime: new Date(),
-          type: '好东西+1',
-          like: 99,
-          url: require('../../assets/myImages/1.png')
-        },
-        {
-          id: 95058,
-          name: '随便看',
-          uploadTime: new Date(),
-          type: '一般般',
-          like: 1,
-          url: require('../../assets/myImages/2.png')
-        },
-        {
-          id: 4456456,
-          name: '顶上之战',
-          uploadTime: new Date(),
-          type: '好东西',
-          like: 123,
-          url: require('../../assets/myImages/0.png')
-        },
-        {
-          id: 456872,
-          name: '纪念',
-          uploadTime: new Date(),
-          type: '好东西+1',
-          like: 99,
-          url: require('../../assets/myImages/1.png')
-        },
-        {
-          id: 95058,
-          name: '随便看',
-          uploadTime: new Date(),
-          type: '一般般',
-          like: 1,
-          url: require('../../assets/myImages/2.png')
+      this.$axios.get('/u/1/albums/1').then((res)=> {
+        this.originTableData = res.data.data
+        this.tableData = this.originTableData.filter((item, index) => {
+          return index < this.currentPage * this.pageSize
+        })
+        for (let i = 0; i < this.tableData.length; i++) {
+          this.previewSrcList[i] = this.tableData[i].url
         }
-      ]
-      this.tableData = this.originTableData.filter((item, index) => {
-        return index < this.currentPage * this.pageSize
+        this.total = this.originTableData.length
       })
-      this.tableData.forEach((item, index) => {
-        this.previewSrcList[index] = item.url
-      })
-      this.total = this.originTableData.length
     }
   }
 </script>
@@ -378,6 +202,7 @@
       height: auto;
       width: 100%;
       margin-bottom: 30px;
+
       h1 {
         color: rgb(152, 52, 52);
         font-weight: bold;

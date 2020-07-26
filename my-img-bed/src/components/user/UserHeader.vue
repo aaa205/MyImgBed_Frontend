@@ -12,19 +12,14 @@
       <div class="upload-container">
         <el-upload
           class="upload-demo flex-align-items-center"
-          action="post"
-          :on-preview="handlePreview"
-          :on-remove="handleRemove"
-          :before-remove="beforeRemove"
+          action="#"
           multiple
-          :on-exceed="handleExceed"
-          :file-list="fileList">
+          :before-upload="upload"
+          :accept="'image/*'"
+        >
           <el-link type="info" :underline='false'>上传</el-link>
         </el-upload>
       </div>
-<!--      <div class="change-psw">-->
-<!--        <el-link type="info" :underline='false'>修改密码</el-link>-->
-<!--      </div>-->
       <div class="logout">
         <el-link type="info" :underline='false' href="/index">退出登陆</el-link>
       </div>
@@ -41,22 +36,21 @@
           logo: [
             {url: require('../../assets/logo.png'), alt: 'logo'}
           ]
-        },
-        fileList: []
+        }
       }
     },
     methods: {
-      handlePreview: function () {
-
-      },
-      handleRemove: function () {
-
-      },
-      beforeRemove: function () {
-
-      },
-      handleExceed: function () {
-
+      upload: function (imgFile) {
+        let fd = new FormData()
+        fd.append('file',imgFile)
+        this.$axios.request({
+          method: 'post',
+          data: fd,
+          params: {
+            userID:1,
+            albumID: 1
+          }
+        })
       }
     }
   }

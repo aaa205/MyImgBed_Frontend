@@ -5,8 +5,12 @@ import App from './App'
 import router from './router'
 import Vuex from 'vuex'
 import store from './store/store'
-
+import axios from 'axios'
 Vue.config.productionTip = false
+
+Vue.prototype.$axios = axios
+axios.defaults.baseURL = '/api'
+Vue.prototype.$store = store
 
 /* eslint-disable no-new */
 new Vue({

@@ -19,15 +19,15 @@
           <div class="describe">
             <div class="likeArea">
               <el-badge
-                :value="image.likeCount"
+                :value="image.like"
                 :max="999">
                 <a @click="handleLike">
-                  <span :class="image.isLiked"></span>
+                  <span class="el-icon-star-on"></span>
                 </a>
               </el-badge>
             </div>
             <div class="titleArea">
-              <span class="name"><p v-text="image.index"></p></span>
+              <span class="name"><p v-text="image.name"></p></span>
             </div>
             <div class="deleteArea">
               <a @click="handleDelete">
@@ -52,6 +52,8 @@
 </template>
 
 <script>
+  import axios from 'axios'
+
   export default {
     name: 'Album',
     props: {
@@ -60,6 +62,7 @@
     data () {
       return {
         images: [],
+        // images: [],
         previewSrcList: [],
         currentPage: 1,
         imagesShow: [],
@@ -102,206 +105,46 @@
       },
       handleDelete: function (event) {
         let curIndex = Number.parseInt(event.target.getAttribute('imageindex'))
-        this.imagesShow.splice(curIndex, 1)
-        this.images.splice(curIndex, 1)
-        console.log(this.imagesShow.length, this.images.length)
+        let id = this.imagesShow[curIndex].id
         this.$confirm('此操作将永久删除该图片, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(() => {
+        }).then(() =>{
+          this.imagesShow.splice(curIndex, 1)
+          this.images.splice(curIndex*this.currentPage, 1)
+          this.total--
           this.$message({
             type: 'success',
             message: '删除成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
+          })
+          this.$axios.request({
+            method: 'delete',
+            url: `p/${id}`,
+            params:{
+              userID:1,
+              albumID:1
+            }
+          }).then(res=>{}).catch(err=>{
+            alert(err)
           })
         })
-        // this.total--
         // 需要请求刷新页面
       }
     },
     created () {
-      this.images = [
-        {
-          index: 0,
-          url: require('../../assets/myImages/0.png'),
-          alt: '0',
-          isLiked: 'el-icon-star-off',
-          likeCount: 123
-        },
-        {
-          index: 1,
-          url: require('../../assets/myImages/1.png'),
-          alt: '1',
-          isLiked: 'el-icon-star-off',
-          likeCount: 12
-        },
-        {
-          index: 2,
-          url: require('../../assets/myImages/0.png'),
-          alt: '2',
-          isLiked: 'el-icon-star-off',
-          likeCount: 1
-        },
-        {
-          index: 3,
-          url: require('../../assets/myImages/1.png'),
-          alt: '3',
-          isLiked: 'el-icon-star-off',
-          likeCount: 123
-        },
-        {
-          index: 4,
-          url: require('../../assets/myImages/0.png'),
-          alt: '0',
-          isLiked: 'el-icon-star-off',
-          likeCount: 123
-        },
-        {
-          index: 5,
-          url: require('../../assets/myImages/1.png'),
-          alt: '1',
-          isLiked: 'el-icon-star-off',
-          likeCount: 123
-        },
-        {
-          index: 6,
-          url: require('../../assets/myImages/0.png'),
-          alt: '0',
-          isLiked: 'el-icon-star-off',
-          likeCount: 123
-        },
-        {
-          index: 7,
-          url: require('../../assets/myImages/1.png'),
-          alt: '1',
-          isLiked: 'el-icon-star-off',
-          likeCount: 123
-        },
-        {
-          index: 8,
-          url: require('../../assets/myImages/0.png'),
-          alt: '0',
-          isLiked: 'el-icon-star-off',
-          likeCount: 123
-        },
-        {
-          index: 9,
-          url: require('../../assets/myImages/1.png'),
-          alt: '1',
-          isLiked: 'el-icon-star-off',
-          likeCount: 123
-        },
-        {
-          index: 10,
-          url: require('../../assets/myImages/0.png'),
-          alt: '0',
-          isLiked: 'el-icon-star-off',
-          likeCount: 123
-        },
-        {
-          index: 11,
-          url: require('../../assets/myImages/1.png'),
-          alt: '1',
-          isLiked: 'el-icon-star-off',
-          likeCount: 123
-        },
-        {
-          index: 12,
-          url: require('../../assets/myImages/0.png'),
-          alt: '0',
-          isLiked: 'el-icon-star-off',
-          likeCount: 123
-        },
-        {
-          index: 13,
-          url: require('../../assets/myImages/1.png'),
-          alt: '1',
-          isLiked: 'el-icon-star-off',
-          likeCount: 123
-        },
-        {
-          index: 14,
-          url: require('../../assets/myImages/0.png'),
-          alt: '0',
-          isLiked: 'el-icon-star-off',
-          likeCount: 123
-        },
-        {
-          index: 15,
-          url: require('../../assets/myImages/1.png'),
-          alt: '1',
-          isLiked: 'el-icon-star-off',
-          likeCount: 123
-        },
-        {
-          index: 16,
-          url: require('../../assets/myImages/0.png'),
-          alt: '0',
-          isLiked: 'el-icon-star-off',
-          likeCount: 123
-        },
-        {
-          index: 17,
-          url: require('../../assets/myImages/1.png'),
-          alt: '1',
-          isLiked: 'el-icon-star-off',
-          likeCount: 123
-        },
-        {
-          index: 18,
-          url: require('../../assets/myImages/0.png'),
-          alt: '0',
-          isLiked: 'el-icon-star-off',
-          likeCount: 123
-        },
-        {
-          index: 19,
-          url: require('../../assets/myImages/1.png'),
-          alt: '1',
-          isLiked: 'el-icon-star-off',
-          likeCount: 123
-        },
-        {
-          index: 20,
-          url: require('../../assets/myImages/0.png'),
-          alt: '0',
-          isLiked: 'el-icon-star-off',
-          likeCount: 123
-        },
-        {
-          index: 21,
-          url: require('../../assets/myImages/1.png'),
-          alt: '1',
-          isLiked: 'el-icon-star-off',
-          likeCount: 123
-        },
-        {
-          index: 22,
-          url: require('../../assets/myImages/0.png'),
-          alt: '0',
-          isLiked: 'el-icon-star-off',
-          likeCount: 123
-        },
-        {
-          index: 23,
-          url: require('../../assets/myImages/1.png'),
-          alt: '1',
-          isLiked: 'el-icon-star-off',
-          likeCount: 123
+      this.$axios.get('/u/1/albums/1').then((res)=> {
+        this.images = res.data.data
+        console.log(this.images)
+        this.imagesShow = this.images.filter((item, index) => {
+          return index < this.currentPage * 15
+        })
+        for (let i = 0; i < this.imagesShow.length; i++) {
+          this.previewSrcList[i] = this.imagesShow[i].url
         }
-      ]
-      this.imagesShow = this.images.filter((item, index) => {
-        return index < this.currentPage * 15
+        this.total = this.images.length
       })
-      for (let i = 0; i < this.imagesShow.length; i++) {
-        this.previewSrcList[i] = this.imagesShow[i].url
-      }
-      this.total = this.images.length
+
     }
   }
 </script>
@@ -345,6 +188,7 @@
         height: auto;
         display: flex;
         justify-content: space-around;
+
         .likeArea {
           width: 20px;
           float: left;
