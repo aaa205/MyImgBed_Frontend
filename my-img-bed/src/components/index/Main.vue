@@ -56,7 +56,7 @@
     <div class="content">
       <h1>A 2 0 5 图 床</h1>
       <p>
-        本图床有A205全体成员共同开发，请勿上传涩图。
+<!--        本图床有A205全体成员共同开发，请勿上传涩图。-->
       </p>
       <el-upload
         class="upload-demo"
