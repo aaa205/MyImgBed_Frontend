@@ -52,114 +52,117 @@
 </template>
 
 <script>
-  export default {
-    name: 'Album',
-    props: {
-      imageIndex: Number
-    },
-    data () {
-      return {
-        images: [],
-        // images: [],
-        previewSrcList: [],
-        currentPage: 1,
-        imagesShow: [],
-        total: 0,
-        userID: -1,
-        Token: ''
-      }
-    },
-    methods: {
-      handleCurrentChange: function (curPage) {
-        this.imagesShow = this.images.filter((item, index) => {
-          return index < curPage * 15 && index >= (curPage - 1) * 15
-        })
-        for (let i = 0; i < this.imagesShow.length; i++) {
-          this.previewSrcList[i] = this.imagesShow[i].url
-        }
-      },
-      handlePrevClick: function (curPage) {
-        this.imagesShow = this.images.filter((item, index) => {
-          return index < curPage * 15 && index >= (curPage - 1) * 15
-        })
-        for (let i = 0; i < this.imagesShow.length; i++) {
-          this.previewSrcList[i] = this.imagesShow[i].url
-        }
-      },
-      handleNextClick: function (curPage) {
-        this.imagesShow = this.images.filter((item, index) => {
-          return index < curPage * 15 && index >= (curPage - 1) * 15
-        })
-        for (let i = 0; i < this.imagesShow.length; i++) {
-          this.previewSrcList[i] = this.imagesShow[i].url
-        }
-      },
-      handleLike: function (event) {
-        if (event.target.className === 'el-icon-star-off') {
-          event.target.className = 'el-icon-star-on'
-          console.log('Like it!')
-        } else if (event.target.className === 'el-icon-star-on') {
-          event.target.className = 'el-icon-star-off'
-          console.log('Dislike it!')
-        }
-      },
-      handleDelete: function (event) {
-        let curIndex = Number.parseInt(event.target.getAttribute('imageindex'))
-        let id = this.imagesShow[curIndex].id
-        this.$confirm('此操作将永久删除该图片, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() =>{
-          this.imagesShow.splice(curIndex, 1)
-          this.images.splice(curIndex*this.currentPage, 1)
-          this.total--
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
-          this.$axios.request({
-            method: 'delete',
-            url: `p/${id}`,
-            params:{
-              userID:1,
-              albumID:1
+    export default {
+        name: 'Album',
+        props: {
+            imageIndex: Number
+        },
+        data() {
+            return {
+                images: [],
+                // images: [],
+                previewSrcList: [],
+                currentPage: 1,
+                imagesShow: [],
+                total: 0,
+                userID: -1,
+                token: ''
             }
-          }).then(res=>{}).catch(err=>{
-            alert(err)
-          })
-        })
-        // 需要请求刷新页面
-      }
-    },
-    created () {
-      let str = sessionStorage.getItem('store')
-      let startIndex = str.indexOf('userID')+9
-      let endIndex = str.indexOf('"',startIndex)
-      this.userID = str.substr(startIndex,endIndex-startIndex)
-      startIndex = str.indexOf('Token')+8
-      endIndex = str.indexOf('"',startIndex)
-      this.Token = str.substr(startIndex, endIndex-startIndex)
-      this.$axios.request({
-        method: 'get',
-        url: `/pic/u/${this.userID}/pictures`,
-        headers: {
-          Authorization: this.Token
-        }
-      }).then((res)=> {
-        this.images = res.data.data
-        console.log(this.images)
-        this.imagesShow = this.images.filter((item, index) => {
-          return index < this.currentPage * 15
-        })
-        for (let i = 0; i < this.imagesShow.length; i++) {
-          this.previewSrcList[i] = this.imagesShow[i].url
-        }
-        this.total = this.images.length
-      })
+        },
+        methods: {
+            handleCurrentChange: function (curPage) {
+                this.imagesShow = this.images.filter((item, index) => {
+                    return index < curPage * 15 && index >= (curPage - 1) * 15
+                })
+                for (let i = 0; i < this.imagesShow.length; i++) {
+                    this.previewSrcList[i] = this.imagesShow[i].url
+                }
+            },
+            handlePrevClick: function (curPage) {
+                this.imagesShow = this.images.filter((item, index) => {
+                    return index < curPage * 15 && index >= (curPage - 1) * 15
+                })
+                for (let i = 0; i < this.imagesShow.length; i++) {
+                    this.previewSrcList[i] = this.imagesShow[i].url
+                }
+            },
+            handleNextClick: function (curPage) {
+                this.imagesShow = this.images.filter((item, index) => {
+                    return index < curPage * 15 && index >= (curPage - 1) * 15
+                })
+                for (let i = 0; i < this.imagesShow.length; i++) {
+                    this.previewSrcList[i] = this.imagesShow[i].url
+                }
+            },
+            handleLike: function (event) {
+                if (event.target.className === 'el-icon-star-off') {
+                    event.target.className = 'el-icon-star-on'
+                    console.log('Like it!')
+                } else if (event.target.className === 'el-icon-star-on') {
+                    event.target.className = 'el-icon-star-off'
+                    console.log('Dislike it!')
+                }
+            },
+            handleDelete: function (event) {
+                let curIndex = Number.parseInt(event.target.getAttribute('imageindex'))
+                let id = this.imagesShow[curIndex].id
+                this.$confirm('此操作将永久删除该图片, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.imagesShow.splice(curIndex, 1)
+                    this.images.splice(curIndex * this.currentPage, 1)
+                    this.total--
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功'
+                    })
+                    this.$axios.request({
+                        method: 'delete',
+                        headers:{Authorization: this.token},
+                        url: `pic/p/${id}`,
+                        params: {
+                            userID: this.userID,
+                            albumID: this.albumID
+                        }
+                    }).then(res => {
 
+                    }).catch(err => {
+
+                    })
+                })
+                // 需要请求刷新页面
+            }
+        },
+        created() {
+            let str = sessionStorage.getItem('store')
+            let startIndex = str.indexOf('userID') + 9
+            let endIndex = str.indexOf('"', startIndex)
+            this.userID = str.substr(startIndex, endIndex - startIndex)
+            startIndex = str.indexOf('Token') + 8
+            endIndex = str.indexOf('"', startIndex)
+            this.token = str.substr(startIndex, endIndex - startIndex)
+            this.$axios.request({
+                method: 'get',
+                url: `/pic/u/${this.userID}/pictures`,
+                headers: {
+                    Authorization: this.token
+                }
+            }).then((res) => {
+                this.images = res.data.data
+                console.log(this.images)
+                this.imagesShow = this.images.filter((item, index) => {
+                    return index < this.currentPage * 15
+                })
+                for (let i = 0; i < this.imagesShow.length; i++) {
+                    this.previewSrcList[i] = this.imagesShow[i].url
+                }
+                this.total = this.images.length
+            })
+
+        }
     }
-  }
 </script>
 
 <style scoped lang="scss">
