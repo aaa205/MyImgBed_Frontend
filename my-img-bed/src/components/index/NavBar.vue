@@ -90,7 +90,7 @@
           })
         }).catch(err=>{
           this.$message({
-            type: 'err',
+            type: 'error',
             message: '上传失败'
           })
         })

@@ -165,7 +165,10 @@
             })
             window.location.reload()
           }).catch(err=>{
-            alert(err)
+            this.$message({
+              type: 'error',
+              message: '删除失败!'
+            })
           })
       },
       onCopy: function () {
