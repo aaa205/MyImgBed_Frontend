@@ -9,7 +9,7 @@
       </el-header>
       <el-container class="no-margin no-padding">
         <el-aside v-if="!$route.meta.isIndex" class="no-margin no-padding">
-          <nav-menu ></nav-menu>
+          <nav-menu></nav-menu>
         </el-aside>
         <el-main class="no-margin no-padding full-height" style="height: 100%">
           <router-view/>
@@ -35,24 +35,24 @@
     name: 'App',
     components: {UserHeader, NavBar, CommonFooter, NavMenu},
     created () {
-      if (sessionStorage.getItem("store")) {
+      if (sessionStorage.getItem('store')) {
         this.$store.replaceState(Object.assign({},
           this.$store.state,
-          JSON.parse(sessionStorage.getItem("store"))))
+          JSON.parse(sessionStorage.getItem('store'))))
       }
-      window.addEventListener('beforeunload',()=>{
-        sessionStorage.setItem("store",JSON.stringify(this.$store.state))
+      window.addEventListener('beforeunload', () => {
+        sessionStorage.setItem('store', JSON.stringify(this.$store.state))
       })
     }
   }
 </script>
 
 <style lang="scss">
-  .full-height{
+  .full-height {
     height: 100%;
   }
 
-  .no-padding{
+  .no-padding {
     padding: 0;
   }
 
@@ -60,8 +60,12 @@
     margin: 0;
   }
 
-  .border{
+  .border {
     border: 2px black solid;
+  }
+
+  .el-header, .el-footer {
+    padding: 0;
   }
 
   /* http://meyerweb.com/eric/tools/css/reset/
@@ -127,14 +131,17 @@
   .el-message-box__wrapper, .el-message-box {
     width: auto;
     height: auto;
+
     div {
       width: auto;
       height: auto;
     }
   }
-  .el-message, .el-message--success{
+
+  .el-message, .el-message--success {
     width: auto;
     height: auto;
+
     div {
       width: auto;
       height: auto;
@@ -142,7 +149,7 @@
   }
 
   #app {
-    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #333333;

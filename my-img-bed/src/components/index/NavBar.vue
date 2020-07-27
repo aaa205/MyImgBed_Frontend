@@ -83,6 +83,16 @@
           headers: {
             Authorization: this.Token
           }
+        }).then(res=>{
+          this.$message({
+            type: 'success',
+            message: '上传成功'
+          })
+        }).catch(err=>{
+          this.$message({
+            type: 'err',
+            message: '上传失败'
+          })
         })
       }
     }

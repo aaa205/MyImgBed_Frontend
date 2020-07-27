@@ -147,7 +147,7 @@
           Authorization: this.Token
         }
       }).then((res)=> {
-        this.images = res.data.data
+        this.images = res.data.data.reverse()
         console.log(this.images)
         this.imagesShow = this.images.filter((item, index) => {
           return index < this.currentPage * 15

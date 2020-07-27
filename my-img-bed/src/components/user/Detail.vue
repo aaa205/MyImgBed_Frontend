@@ -194,7 +194,7 @@
           Authorization: this.Token
         }
       }).then((res)=> {
-        this.originTableData = res.data.data
+        this.originTableData = res.data.data.reverse()
         this.tableData = this.originTableData.filter((item, index) => {
           return index < this.currentPage * this.pageSize
         })

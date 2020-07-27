@@ -56,7 +56,16 @@
             Authorization: this.Token
           }
         }).then(res=>{
+          this.$message({
+            type: 'success',
+            message: '上传成功'
+          })
           window.location.reload()
+        }).catch(err=>{
+          this.$message({
+            type: 'error',
+            message: '上传失败'
+          })
         })
       },
       handleLogout: function () {

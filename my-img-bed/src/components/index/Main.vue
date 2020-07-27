@@ -168,7 +168,7 @@
           // 注册完直接登录
           this.loginForm.usernameL = this.registForm.usernameR
           this.loginForm.passwordL = this.registForm.passwordR
-          this.$store.commit('Regist',{
+          this.$store.commit('Regist', {
             uid: res.data.data.id
           })
           this.$message({
@@ -176,28 +176,28 @@
             message: '注册成功'
           })
           this.handleRegistCancel()
-        }).then(res=>{  // 注册成功开始登录
-            this.$axios.request({
-              method: 'post',
-              url: '/user/login',
-              data: {
-                name: this.loginForm.usernameL,
-                password: this.loginForm.passwordL
-              }
-            }).then(res=>{
-              // 登录成功，转换登录状态
-              this.$store.commit('Login',{
-                token: res.data.data.token,
-                uid: res.data.data.userID
-              })
-              this.$store.commit('setUsername',res.data.data.userName)
-              this.$message({
-                type: 'success',
-                message: '登录成功！'
-              })
-              this.createAlbum()
+        }).then(res => {  // 注册成功开始登录
+          this.$axios.request({
+            method: 'post',
+            url: '/user/login',
+            data: {
+              name: this.loginForm.usernameL,
+              password: this.loginForm.passwordL
+            }
+          }).then(res => {
+            // 登录成功，转换登录状态
+            this.$store.commit('Login', {
+              token: res.data.data.token,
+              uid: res.data.data.userID
             })
-          }).catch(err => {
+            this.$store.commit('setUsername', res.data.data.userName)
+            this.$message({
+              type: 'success',
+              message: '登录成功！'
+            })
+            this.createAlbum()
+          })
+        }).catch(err => {
           this.$message({
             type: 'error',
             message: '注册失败'
@@ -224,13 +224,13 @@
             name: this.loginForm.usernameL,
             password: this.loginForm.passwordL
           }
-        }).then(res=>{
+        }).then(res => {
           // 转换登录状态
-          this.$store.commit('Login',{
+          this.$store.commit('Login', {
             token: res.data.data.token,
             uid: res.data.data.userID
           })
-          this.$store.commit('setUsername',res.data.data.userName)
+          this.$store.commit('setUsername', res.data.data.userName)
           this.$message({
             type: 'success',
             message: '登录成功！'
@@ -241,12 +241,12 @@
             headers: {
               Authorization: this.$store.state.Token
             }
-          }).then(res=> {
+          }).then(res => {
             this.$store.commit('setAlbumID', res.data.data[0].id)
             this.handleLoginCancel()
             window.location.reload()
           })
-        }).catch(err=>{
+        }).catch(err => {
           this.$message({
             type: 'error',
             message: '登录失败！'
@@ -256,9 +256,9 @@
       },
       beforeUpload: function (imgFile) {
         let fd = new FormData()
-        fd.append('file',imgFile)
-        fd.append('userID',this.userID)
-        fd.append('albumID',this.albumID)
+        fd.append('file', imgFile)
+        fd.append('userID', this.userID)
+        fd.append('albumID', this.albumID)
         this.$axios.request({
           method: 'post',
           data: fd,
@@ -266,6 +266,16 @@
           headers: {
             Authorization: this.Token
           }
+        }).then(res => {
+          this.$message({
+            type: 'success',
+            message: '上传成功'
+          })
+        }).catch(err=>{
+          this.$message({
+            type: 'error',
+            message: '上传失败'
+          })
         })
       },
       // 创建相册
@@ -273,16 +283,16 @@
         this.$axios.request({
           method: 'post',
           url: `/pic/u/${this.$store.state.userID}/albums`,
-          data:{
+          data: {
             newAlbumName: 'myAlbum'
           },
-          headers:{
+          headers: {
             'Authorization': this.$store.state.Token
           }
-        }).then(res=>{
-          this.$store.commit('setAlbumID',res.data.data.id)
+        }).then(res => {
+          this.$store.commit('setAlbumID', res.data.data.id)
           window.location.reload()
-        }).catch(err=>{
+        }).catch(err => {
           alert(err)
         })
       }
